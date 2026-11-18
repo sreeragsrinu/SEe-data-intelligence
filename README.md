@@ -24,6 +24,33 @@ Your data is processed in the browser with DuckDB-WASM and is never sent to an a
 - **File formats:** CSV, TSV, JSON, JSONL/NDJSON, Parquet, XLSX and XLS (first worksheet).
 
 ---
+## Architecture & Workflow
+
+SEE follows a local-first architecture. Uploaded datasets are processed directly in the browser using DuckDB-WASM, without sending data to an application backend.
+
+```mermaid
+flowchart TD
+    A[Upload Dataset] --> B[File Processing]
+    B --> C[DuckDB-WASM]
+    C --> D[Schema Detection & Profiling]
+    D --> E[Autonomous Analysis]
+    E --> F[Dashboard Generation]
+    E --> G[Evidence-Based Insights]
+    E --> H[SQL Lab]
+    E --> I[Analyst Chat]
+    C --> J[Data Explorer]
+
+    F --> K[Interactive Analytics]
+    G --> K
+    H --> K
+    I --> K
+```
+
+**Processing flow:**
+- **Input:** CSV, Excel, JSON, Parquet and other supported formats.
+- **Processing:** Local browser-based data processing with DuckDB-WASM.
+- **Analysis:** Schema detection, data profiling, statistical analysis and SQL queries.
+- **Output:** Interactive dashboards, visualizations and evidence-backed observations.
 
 ## Screenshots
 
@@ -133,6 +160,27 @@ SEe is an MVP, not a certified reporting system.
 React, TypeScript, Vite, DuckDB-WASM, Recharts, PapaParse, SheetJS, WebLLM, Lucide, Built with AI assistance.
 
 ---
+## Project Structure
+
+```text
+SEe-data-intelligence/
+│
+├── public/                  # Static assets and application icons
+│
+├── src/
+│   ├── components/          # UI components
+│   ├── lib/                 # Analytics and data-processing logic
+│   ├── App.tsx              # Main application
+│   └── main.tsx             # Application entry point
+│
+├── Test_Data/               # Sample datasets for testing
+│
+├── package.json             # Dependencies and scripts
+├── vite.config.ts           # Vite configuration
+├── netlify.toml             # Netlify deployment configuration
+├── index.html
+└── README.md
+```
 
 ## License
 
