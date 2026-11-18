@@ -1,25 +1,113 @@
-# SEE
+<h1 align="center">SEe</h1>
 
-A local-first, browser-based data analysis workspace. Upload a file, investigate the data, generate a dashboard, and explore evidence-backed business questions without configuring a hosted AI API key.
+![SEe](Images/See.jpeg)
 
-## Brand and visual system
+**A local-first, browser-based data analysis workspace.** Upload a dataset, let SEe investigate it, and get a dashboard and evidence-backed observations in seconds. No account, no API key and no hosted AI inference needed.
 
-SEE uses an ocean-inspired identity: deep marine navy, ocean teal, sea-glass surfaces and mist backgrounds. Charts use a distinct palette of ocean teal (`#16A6A1`), clear blue (`#3B82F6`), amber (`#F29E4C`), violet (`#8B7CE8`), coral (`#E56F91`) and seafoam (`#65BFA8`) so different measures remain easy to distinguish. The wave mark represents the sea and the idea of discovering signals beneath the surface.
+Your data is processed in the browser with DuckDB-WASM and is never sent to an application backend.
 
-## Included in this build
+---
 
-- **Autonomous Analyst:** deterministic DuckDB profiling, NULL checks, high-cardinality identifier hints, monthly comparisons when date and numeric fields are available, and segment ranking.
-- **Dashboard Intelligence:** business-objective selector, KPI cards, monthly trend, segment chart, and a segment filter.
-- **Business Decision Intelligence:** evidence cards and cautious follow-up actions. It distinguishes descriptive observations from causal explanations; it does not claim that correlation proves cause.
-- **Analyst chat:** a transparent rule-based question planner and optional WebLLM local model. All generated SQL is restricted to a single read-only SELECT and executed by DuckDB-WASM.
-- **SQL Lab, data preview, CSV export, dark/light appearance.**
+## Features
+
+- **Autonomous Analyst:** profiles every field, checks for NULLs, flags identifier-like columns, compares months and ranks segments with numerical evidence.
+- **Dashboard Intelligence:** six KPI cards plus interactive charts:
+  - monthly trend with a 3-month average, a linear trend and a dashed 3-month projection
+  - green and red donut of records by category
+  - column charts for totals, day-of-week patterns and averages against the group mean
+  - scatter plot with a correlation reading
+  - scrollable Top 10 chart with red gradient bars
+- **Decision Intelligence:** evidence cards and cautious next steps. It separates descriptive observations from causes and never claims that correlation proves cause.
+- **Data Explorer:** preview the loaded rows and detected fields.
+- **SQL Lab:** run read-only `SELECT` queries on your data and export results to CSV.
+- **Analyst chat:** ask questions in plain language. A rule-based planner writes the SQL, and an optional local WebLLM model is available.
 - **File formats:** CSV, TSV, JSON, JSONL/NDJSON, Parquet, XLSX and XLS (first worksheet).
+
+---
+## Architecture & Workflow
+
+SEE follows a local-first architecture. Uploaded datasets are processed directly in the browser using DuckDB-WASM, without sending data to an application backend.
+
+```mermaid
+flowchart TD
+    A[Upload Dataset] --> B[File Processing]
+    B --> C[DuckDB-WASM]
+    C --> D[Schema Detection & Profiling]
+    D --> E[Autonomous Analysis]
+    E --> F[Dashboard Generation]
+    E --> G[Evidence-Based Insights]
+    E --> H[SQL Lab]
+    E --> I[Analyst Chat]
+    C --> J[Data Explorer]
+
+    F --> K[Interactive Analytics]
+    G --> K
+    H --> K
+    I --> K
+```
+
+**Processing flow:**
+- **Input:** CSV, Excel, JSON, Parquet and other supported formats.
+- **Processing:** Local browser-based data processing with DuckDB-WASM.
+- **Analysis:** Schema detection, data profiling, statistical analysis and SQL queries.
+- **Output:** Interactive dashboards, visualizations and evidence-backed observations.
+
+## Screenshots
+
+### 1. Workspace: drop in a dataset
+
+![Workspace welcome screen](Images/1.png)
+
+### 2. Dashboard: KPIs, monthly trend and records by category
+
+![Dashboard overview](Images/2.png)
+
+### 3. Interactive column charts and scatter plot
+
+![Column charts and scatter plot](Images/3.png)
+
+### 4. Average vs. group mean and the scrollable Top 10
+
+![Top 10 chart](Images/4.png)
+
+### 5. Automated observations
+
+![Automated observations](Images/5.png)
+
+### 6. Decision intelligence: from evidence to next action
+
+![Decision intelligence](Images/6.png)
+
+### 7. Suggested next steps
+
+![Suggested next steps](Images/7.png)
+
+### 8. Data explorer
+
+![Data explorer](Images/8.png)
+
+### 9. SQL Lab
+
+![SQL Lab](Images/9.png)
+
+### 10. Workspace: analyst conversation and detected fields
+
+![Analyst conversation and detected fields](Images/10.png)
+
+---
+
+## Try it with the sample data
+
+`Test_Data/SEE_retail_transactions_test_dataset.csv` is a sample retail transactions file with 1,500 rows and 12 columns. Upload it to see every screen above.
+
+---
 
 ## Run locally
 
 Requirements: Node.js 20+ and npm.
 
 ```bash
+cd SEe-data-intelligence
 npm install
 npm run dev
 ```
@@ -30,56 +118,82 @@ Production build:
 npm run build
 ```
 
-## Deploy to Netlify
+---
 
-The repository includes `netlify.toml`. Connect the Git repository to Netlify or run `npm run build` and publish the `dist` directory. No server-side API keys are required.
+## Deploy
 
-## Privacy and model behaviour
+The app is static, so it deploys to Netlify or Vercel without a server. The app lives in the `SEe-data-intelligence/` folder, so set that as the **root / base directory** when importing the repository.
 
-- Uploaded data is loaded into DuckDB-WASM in the browser; this project does not upload it to an application backend.
-- The optional WebLLM model runs in the browser via WebGPU. Model weights are downloaded from the configured model distribution on first use. This is not a hosted inference API, but it does require an internet connection for model download and compatible browser/WebGPU hardware.
-- Local AI is optional. The core deterministic analysis works without downloading a language model.
-- Netlify hosts the static application; it does not host or run the language model.
+| Setting | Value |
+| --- | --- |
+| Root / base directory | `SEe-data-intelligence` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Node version | 20 |
 
-## Important analytical limits
+The repository includes a `netlify.toml` inside `SEe-data-intelligence/`.
 
-This is an MVP, not a certified financial reporting system. Automatic field selection is heuristic. The dashboard picks a likely numeric metric, date and category based on names/types; verify those choices against your data dictionary. Missing-value checks currently count SQL NULLs (not every possible blank-string convention). Trend comparisons are descriptive, not causal. Decision cards suggest what to investigate, not what action is guaranteed to work. Excel import uses the first worksheet. Very large files and browser memory limits depend on the user's device.
+---
 
-## Security notes
+## Privacy
 
-Generated natural-language SQL is validated as a single SELECT statement referencing the active table. The SQL Lab is intended for trusted user-authored queries. Do not treat a browser-only app as a secure multi-user data governance boundary.
+- Uploaded data is loaded into DuckDB-WASM in your browser and is not uploaded to an application backend.
+- The DuckDB engine files are downloaded from jsDelivr on first load, so the first visit needs an internet connection.
+- The local AI model is optional. It runs in the browser via WebGPU, and its model files are downloaded on first use. The core analysis works without it.
+
+---
+
+## Limits
+
+SEe is an MVP, not a certified reporting system.
+
+- Field selection (metric, date, category) is heuristic. Check it against your data dictionary.
+- Missing-value checks count SQL NULLs, not every blank-string convention.
+- Trends and projections are descriptive. The dashed projection is a simple linear extrapolation, not a forecasting model.
+- Observations suggest what to investigate, not what action is guaranteed to work.
+- Very large files depend on your device's browser memory.
+
+---
 
 ## Tech stack
 
-React, TypeScript, Vite, DuckDB-WASM, PapaParse, SheetJS, Recharts, WebLLM, Lucide.
+React, TypeScript, Vite, DuckDB-WASM, Recharts, PapaParse, SheetJS, WebLLM, Lucide, Built with AI assistance.
 
-## Visual theme
+---
+## Project Structure
 
-The default interface uses the requested **Ghost White** (`#F7F7FF`) and **Persian Indigo** (`#27187E`) palette. A dark appearance remains available from the sidebar. The primary palette pair has an approximately **12.98:1** contrast ratio, exceeding the WCAG AA 4.5:1 minimum for normal text when used as foreground/background.
+```text
+SEe-data-intelligence/
+│
+├── public/                  # Static assets and application icons
+│
+├── src/
+│   ├── components/          # UI components
+│   ├── lib/                 # Analytics and data-processing logic
+│   ├── App.tsx              # Main application
+│   └── main.tsx             # Application entry point
+│
+├── Test_Data/               # Sample datasets for testing
+│
+├── package.json             # Dependencies and scripts
+├── vite.config.ts           # Vite configuration
+├── netlify.toml             # Netlify deployment configuration
+├── index.html
+└── README.md
+```
 
-## Premium analytics update
+## License
 
-The current dashboard builds on the uploaded dataset schema rather than assuming a fixed business domain. It now includes:
+MIT. See [`SEe-data-intelligence/LICENSE`](SEe-data-intelligence/LICENSE).
 
-- A filled monthly trend view when compatible date and numeric fields are available.
-- A numeric relationship explorer using up to 250 valid paired observations when at least two numeric fields are present.
-- Date-field inference from common field names as well as database date/time types, helping datasets whose dates were imported as text.
-- Cleaner category detection that avoids common identifier/contact fields as default business dimensions.
-- Refined KPI, chart, finding and table surfaces using the Ghost White `#F7F7FF` / Persian Indigo `#27187E` visual system.
+## Developed By
 
-All observations remain descriptive and data-backed. The relationship chart is an exploratory association view, not a causal or predictive model.
+SREERAG
+BCA Data Science Graduate
 
-## v0.6.0 (SEe)
+- **GitHub:** [@sreeragsrinu](https://github.com/sreeragsrinu)
+- **LinkedIn:** [Sreerag S](https://www.linkedin.com/in/sreerag-s-9b25162a7/)
+- **Portfolio:** [sreeragportfolio.netlify.app](https://sreeragportfolio.netlify.app)
+- **Email:** [sreeragsrinuu@gmail.com](sreeragsrinuu@gmail.com)
 
-- Renamed the wordmark to **SEa**. Dark theme is the default; light theme remains.
-- Topographic contour background (vector trace of the supplied image, `public/topo.svg`).
-- Dashboard rebuilt to the reference layout: title and note, six KPI cards, four charts, then a row with a wide Top 10 chart (`src/Dashboard.tsx`).
-- Chart colours: line = teal main / blue comparison; bars = teal default with blue and amber for comparison; donut = all six colours; scatter = blue points with a teal trend line. Indicators: green positive, coral/red negative, slate grey neutral.
-- Fixes: XLSX numbers no longer import as text; DuckDB dates, DECIMAL and BIGINT values display correctly; a failed engine start can be retried; ID columns are no longer picked as the metric; the dimension must have 2 to 60 distinct values; SQL guard blocks file/system table functions.
-
-### v0.6.0 changes
-- Name is now **SEe**, with the supplied wave logo and `SEe.jpg` background.
-- Side tab is a drawer opened from the three-dot button (top left).
-- Dashboard charts are larger, two per row, Top 10 full width.
-- Chart colours: bars/scatter points crimson `#E61E32`, donut greens (`#076C45` family), lines Persian indigo `#27187E`. Everything else black and white.
-- "Developed by SREERAG" credit, bottom right.
+---
