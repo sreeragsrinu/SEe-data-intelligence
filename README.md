@@ -23,7 +23,6 @@ Your data is processed in the browser with DuckDB-WASM and is never sent to an a
 - **Analyst chat:** ask questions in plain language. A rule-based planner writes the SQL, and an optional local WebLLM model is available.
 - **File formats:** CSV, TSV, JSON, JSONL/NDJSON, Parquet, XLSX and XLS (first worksheet).
 
-Built with AI assistance.
 ---
 
 ## Screenshots
@@ -131,7 +130,7 @@ SEe is an MVP, not a certified reporting system.
 
 ## Tech stack
 
-React, TypeScript, Vite, DuckDB-WASM, Recharts, PapaParse, SheetJS, WebLLM, Lucide.
+React, TypeScript, Vite, DuckDB-WASM, Recharts, PapaParse, SheetJS, WebLLM, Lucide, Built with AI assistance.
 
 ---
 
