@@ -1,4 +1,4 @@
-<h1 align="center">SEE</h1>
+<h1 align="center">SEe</h1>
 
 ![SEe](Images/See.jpeg)
 
