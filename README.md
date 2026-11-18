@@ -1,14 +1,5 @@
 <h1 align="center">SEE</h1>
 
-<p align="center">
-  Turn data into clarity.
-</p>
-
-<p align="center">
-  An AI-powered data intelligence platform for interactive dashboards,
-  automated analytics, and actionable business insights.
-</p>
-
 ![SEe](Images/See.jpeg)
 
 **A local-first, browser-based data analysis workspace.** Upload a dataset, let SEe investigate it, and get a dashboard and evidence-backed observations in seconds. No account, no API key and no hosted AI inference needed.
